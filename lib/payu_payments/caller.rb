@@ -5,6 +5,8 @@ require 'ostruct'
 module PayuPayments
   class Caller
     include ::HTTParty
+    include Model
+ 
     API = "https://api.payulatam.com"
     API_SANDBOX = "https://stg.api.payulatam.com"
 
@@ -27,11 +29,6 @@ module PayuPayments
       base.marshal_load params
     end
  
-    def ping(params)
-        get("/", :command => "PING")
-    end
-
-
     def get(url, params={})
         headers = { 'Accept' => "application/json", 
                     'Authorization' => "Basic #{basic_auth.to_s}"}

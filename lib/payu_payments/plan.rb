@@ -1,9 +1,9 @@
 module PayuPayments
 
-  class Client < Caller
+  class Plan < Caller
     def initialize(params={})
       super
-      @resource = "customers"
+      @resource = "plans"
     end
   end
 
