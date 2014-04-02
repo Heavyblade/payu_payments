@@ -30,16 +30,32 @@ module PayuPayments
     end
  
     def get(url, params={})
-        headers = { 'Accept' => "application/json", 
-                    'Authorization' => "Basic #{basic_auth.to_s}"}
-        self.class.get(url, :query => params, :verify => false, :headers => headers)
+        http_call("get", url, params)
     end
 
-    def post(url, params)
-        headers = { 'Accept' => "application/json", 
-                    'Content-Type' => 'application/json; charset=UTF-8',
-                    'Authorization' => "Basic #{basic_auth.to_s}"}
-        self.class.post(url, :body => params.to_json, :verify => false, :headers => headers)
+    def post(url, params={})
+        http_call("post", url, params)
+    end
+
+    def put(url, params={})
+        http_call("put", url, params)
+    end
+
+    def delete(url, params={})
+        http_call("delete", url, params)
+    end
+
+    def http_call(type, url, params={})
+        if type == "post" or type == " put"
+            headers = { 'Accept' => "application/json", 
+                        'Content-Type' => 'application/json; charset=UTF-8',
+                        'Authorization' => "Basic #{basic_auth.to_s}"}
+            self.class.send(type, url, :body => params.to_json, :verify => false, :headers => headers)
+        else
+            headers = { 'Accept' => "application/json", 
+                        'Authorization' => "Basic #{basic_auth.to_s}"}
+            self.class.send(type, url, :query => params, :verify => false, :headers => headers)
+        end
     end
 
 
