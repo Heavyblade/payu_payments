@@ -1,32 +1,42 @@
 module Model
+    API_PATH = "/payments-api/rest/v4.3"
+
+    def self.included(base)
+        base.send :extend, ClassMethods
+    end
+
     def save 
-      if new?  
-        resp = post("/payments-api/rest/v4.3/#{@resource}", base.marshal_dump) 
-      else 
-        resp = put("/payments-api/rest/v4.3/#{@resource}/#{base.id}", :body => base.marshal_dump.to_json) 
-      end 
-      base.marshal_load resp
+        if new?  
+          resp = http_call("post", "#{API_PATH}/#{@resource}", base.marshal_dump) 
+        else 
+          resp = http_call("put", "#{API_PATH}/#{@resource}/#{base.id}", base.marshal_dump) 
+        end 
+        base.marshal_load resp
     end
 
     def create(params)
-     post("/payments-api/rest/v4.3/#{@resource}", base.marshal_dump)
+        http_call("post", "#{API_PATH}/#{@resource}", base.marshal_dump)
     end
 
     def edit(id)
-      resp = get("/payments-api/rest/v4.3/#{@resource}/#{id}")
-      base.marshal_load resp
+        resp = http_call("get", "#{API_PATH}/#{@resource}/#{id}")
+        base.marshal_load resp
     end
 
     def destroy(id)
-      delete("/payments-api/rest/v4.3/#{@resource}/#{id}")
+        http_call("delete", "#{API_PATH}/#{@resource}/#{id}")
     end
 
     def new?
-      base.id.nil?
+        base.id.nil?
     end
 
-    def self.find(id)
-      resp = get("/payments-api/rest/v4.3/#{@resource}/#{id}")
-      self.new resp
+    # Class Methods
+    module ClassMethods
+        def find(id)
+            resp = self.new
+            json = resp.http_call("get", "#{API_PATH}/#{resp.resource}/#{id}")
+            self.new json
+        end
     end
 end

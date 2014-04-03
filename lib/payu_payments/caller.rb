@@ -10,7 +10,7 @@ module PayuPayments
     API = "https://api.payulatam.com"
     API_SANDBOX = "https://stg.api.payulatam.com"
 
-    attr_accessor :access, :base
+    attr_accessor :access, :base, :resource
     format :json
     debug_output $stdout
 
@@ -29,22 +29,6 @@ module PayuPayments
       base.marshal_load params
     end
  
-    def get(url, params={})
-        http_call("get", url, params)
-    end
-
-    def post(url, params={})
-        http_call("post", url, params)
-    end
-
-    def put(url, params={})
-        http_call("put", url, params)
-    end
-
-    def delete(url, params={})
-        http_call("delete", url, params)
-    end
-
     def http_call(type, url, params={})
         if type == "post" or type == " put"
             headers = { 'Accept' => "application/json", 
