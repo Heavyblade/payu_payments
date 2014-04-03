@@ -1,6 +1,6 @@
 require "payu_payments/version"
 
-%w{ model caller client }.each do |f|
+%w{ model caller client plan credit_card subscription recurring_bill_item }.each do |f|
   require "payu_payments/#{f}"
 end
 

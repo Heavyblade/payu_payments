@@ -1,6 +1,6 @@
 # PayuPayments
 
-TODO: Write a gem description
+A wrapp for the PayuLata.com payment gateway
 
 ## Installation
 
@@ -18,7 +18,31 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+
+  client = Client.new(:fullName => "john Dow", :email => "johndoe@gmail.com")
+  creditCard: {
+      name: "Sample User Name",
+      document: "1020304050",
+      number: "4242424242424242",
+      expMonth: "01",
+      expYear: "2018",
+      type: "VISA",
+      address: {
+                line1: "Address Name",
+                line2: "17 25",
+                line3: "Of 301",
+                postalCode: "00000",
+                city: "City Name",
+                state: "State Name",
+                country: "CO",
+                phone: "300300300"
+      }
+  }
+  client.add_credit_card(creditCard)
+
+```
+
 
 ## Contributing
 

@@ -3,7 +3,7 @@ require 'spec_helper'
 module PayuPayments
 
   describe Caller do
-    
+
     it "Should set a base container to hold attributes" do
         call = Caller.new
         expect(call.base).to be_an_instance_of(OpenStruct)
@@ -33,8 +33,9 @@ module PayuPayments
         expect(call.base.number).to eq(123)
     end
 
-    context "#get" do
-      before(:each) do
+
+    context "performing http calls" do
+      before :each do
         ::PayuPayments.config do |config|
           config.api_key = "6u39nqhq8ftd0hlvnjfs66eh8c"
           config.api_login = "11959c415b33d0c"
@@ -44,55 +45,48 @@ module PayuPayments
         end
       end
 
-      it "should be able to peform a get request with the needed params" do
-        attr = {:name => "jhon", :last_name => "Doe", :number => 123}
+      it "should be able to perform POST calls" do
+        attr = {fullName: "john doe", email: "jhon@doe.com"}
         call = Caller.new(attr)
-        call.stub!(:basic_auth => "abc123")
-        headers = { 'Accept' => "application/json", 
-                    'Authorization' => "Basic abc123"}
-
-        Caller.should_receive(:get).with("/someurl", :query => attr, :verify => false, :headers => headers)
-
-        call.get("/someurl", attr)
-      end
-
-      it "Should provide the proper basic auth code" do
-        attr = {:name => "jhon", :last_name => "Doe", :number => 123}
-        code = Base64.encode64("11959c415b33d0c:6u39nqhq8ftd0hlvnjfs66eh8c")
-        call = Caller.new(attr)
-        headers = { 'Accept' => "application/json", 
-                    'Authorization' => "Basic #{code}"}
-
-        Caller.should_receive(:get).with("/someurl", :query => attr, :verify => false, :headers => headers)
-
-        call.get("/someurl", attr)
-      end
-    end
-
-    context "#post" do
-      before(:each) do
-        ::PayuPayments.config do |config|
-          config.api_key = "6u39nqhq8ftd0hlvnjfs66eh8c"
-          config.api_login = "11959c415b33d0c"
-          config.merchant_id = "500238"
-          config.account = "5009"
-          config.mode = "development"
-        end
-      end
-
-      it "should be able to peform a post request with the needed params" do
-        attr = {:name => "jhon", :last_name => "Doe", :number => 123}
-        call = Caller.new(attr)
-        call.stub!(:basic_auth => "abc123")
+        call.stub(:basic_auth => "abc123")
         headers = { 'Accept' => "application/json", 
                     'Content-Type' => 'application/json; charset=UTF-8',
                     'Authorization' => "Basic abc123"}
-
-        Caller.should_receive(:post).with("/someurl", :body => attr.to_json, :verify => false, :headers => headers)
-
-        call.post("/someurl", attr)
+        Caller.should_receive(:send).with("post", "/someurl", :body => attr.to_json, :verify => false, :headers => headers)
+        call.http_call("post", "/someurl", attr)
       end
 
+      it "should be able to perform PUT calls" do
+        attr = {fullName: "john doe", email: "jhon@doe.com"}
+        call = Caller.new(attr)
+        call.stub(:basic_auth => "abc123")
+        headers = { 'Accept' => "application/json", 
+                    'Content-Type' => 'application/json; charset=UTF-8',
+                    'Authorization' => "Basic abc123"}
+        Caller.should_receive(:send).with("put", "/someurl", :body => attr.to_json, :verify => false, :headers => headers)
+        call.http_call("put", "/someurl", attr)
+      end
+
+
+      it "should be able to perform GET calls" do
+        attr = {fullName: "john doe", email: "jhon@doe.com"}
+        call = Caller.new(attr)
+        call.stub(:basic_auth => "abc123")
+        headers = { 'Accept' => "application/json", 
+                    'Authorization' => "Basic abc123"}
+        Caller.should_receive(:send).with("get", "/someurl", :query => attr, :verify => false, :headers => headers)
+        call.http_call("get", "/someurl", attr)
+      end
+
+      it "should be able to perform DELETE calls" do
+        attr = {fullName: "john doe", email: "jhon@doe.com"}
+        call = Caller.new(attr)
+        call.stub(:basic_auth => "abc123")
+        headers = { 'Accept' => "application/json", 
+                    'Authorization' => "Basic abc123"}
+        Caller.should_receive(:send).with("delete", "/someurl", :query => attr, :verify => false, :headers => headers)
+        call.http_call("delete", "/someurl", attr)
+      end
     end
 
   end

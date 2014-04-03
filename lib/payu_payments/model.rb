@@ -6,11 +6,9 @@ module Model
     end
 
     def save 
-        if new?  
-          resp = http_call("post", "#{API_PATH}/#{@resource}", base.marshal_dump) 
-        else 
-          resp = http_call("put", "#{API_PATH}/#{@resource}/#{base.id}", base.marshal_dump) 
-        end 
+        verb = new? ? "post" : "put"
+        url = new? ? "#{API_PATH}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
+        resp = http_call(verb, url, base.marshal_dump) 
         base.marshal_load resp
     end
 

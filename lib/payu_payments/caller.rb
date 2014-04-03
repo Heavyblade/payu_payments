@@ -30,7 +30,7 @@ module PayuPayments
     end
  
     def http_call(type, url, params={})
-        if type == "post" or type == " put"
+        if type == "post" || type == "put"
             headers = { 'Accept' => "application/json", 
                         'Content-Type' => 'application/json; charset=UTF-8',
                         'Authorization' => "Basic #{basic_auth.to_s}"}
