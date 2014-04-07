@@ -22,7 +22,7 @@ module PayuPayments
     # maxPaymentAttempts        Máx. 3      Integer	Cantidad total de reintentos para cada pago rechazado de la suscripción.
     # maxPaymentsAllowed            Integer Cantidad total de pagos de la suscripción.
     # maxPendingPayments            Integer Cantidad máxima de pagos pendientes que puede tener una suscripción antes de ser cancelada.
-    # paymentAttemptsDelay
+    # paymentAttemptsDelay          Integer Cantidad de días de espera entre los reintentos de pago de la suscripción.
 
     def initialize(params={})
         super
@@ -65,7 +65,8 @@ module PayuPayments
 
 
     def destroy
-        http_call("delete", "#{API_PATH}/#{@resource}/#{self.attr.planCode}")
+        @id = self.attr.planCode
+        super
     end
   end
 end

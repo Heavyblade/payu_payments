@@ -10,8 +10,8 @@ module Model
 
     def save 
         verb = new? ? "post" : "put"
-        url = new? ? "#{API_PATH}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
-        resp = http_call(verb, url, base.marshal_dump) 
+        @url ||= new? ? "#{API_PATH}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
+        resp = http_call(verb, @url, base.marshal_dump) 
         base.marshal_load resp
     end
 
@@ -25,7 +25,8 @@ module Model
     end
 
     def destroy
-        http_call("delete", "#{API_PATH}/#{@resource}/#{self.attr.id}")
+        @id ||= self.attr.id
+        http_call("delete", "#{API_PATH}/#{@resource}/#{@id}")
     end
 
     def new?

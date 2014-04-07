@@ -37,14 +37,12 @@ module PayuPayments
     end
 
     def save 
-      verb = new? ? "post" : "put"
-      url = new? ? "#{API_PATH}/customers/#{base.customer_id}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
-      resp = http_call(verb, url, base.marshal_dump) 
-      base.marshal_load resp
+      @url = new? ? "#{API_PATH}/customers/#{base.customerId}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
+      super
     end
 
     def create(customer_id, params)
-      url = "#{API_PATH}/customers/#{base.customer_id}/#{@resource}"
+      url = "#{API_PATH}/customers/#{base.customerId}/#{@resource}"
       self.base.marshal_load params
       resp = http_call("post", url, base.marshal_dump) 
       base.marshal_load resp

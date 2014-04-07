@@ -40,11 +40,7 @@ module PayuPayments
                         'Authorization' => "Basic #{basic_auth.to_s}"}
             resp = self.class.send(type, url, :query => params, :verify => false, :headers => headers)
         end
-        if resp == ""
-          {}
-        else
-          resp.inject({ }) { |h, (k,v)| h[k.to_sym] = v; h }
-        end
+        (resp == "" or resp.nil?) ? {} : resp.inject({ }) { |h, (k,v)| h[k.to_sym] = v; h }
     end
 
 
