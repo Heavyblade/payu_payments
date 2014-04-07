@@ -4,6 +4,9 @@ module Model
     def self.included(base)
         base.send :extend, ClassMethods
     end
+    def attr
+      base
+    end
 
     def save 
         verb = new? ? "post" : "put"
@@ -16,13 +19,13 @@ module Model
         http_call("post", "#{API_PATH}/#{@resource}", base.marshal_dump)
     end
 
-    def edit(id)
-        resp = http_call("get", "#{API_PATH}/#{@resource}/#{id}")
+    def load
+        resp = http_call("get", "#{API_PATH}/#{@resource}/#{self.attr.id}")
         base.marshal_load resp
     end
 
-    def destroy(id)
-        http_call("delete", "#{API_PATH}/#{@resource}/#{id}")
+    def destroy
+        http_call("delete", "#{API_PATH}/#{@resource}/#{self.attr.id}")
     end
 
     def new?

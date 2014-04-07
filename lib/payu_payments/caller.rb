@@ -34,11 +34,16 @@ module PayuPayments
             headers = { 'Accept' => "application/json", 
                         'Content-Type' => 'application/json; charset=UTF-8',
                         'Authorization' => "Basic #{basic_auth.to_s}"}
-            self.class.send(type, url, :body => params.to_json, :verify => false, :headers => headers)
+            resp = self.class.send(type, url, :body => params.to_json, :verify => false, :headers => headers)
         else
             headers = { 'Accept' => "application/json", 
                         'Authorization' => "Basic #{basic_auth.to_s}"}
-            self.class.send(type, url, :query => params, :verify => false, :headers => headers)
+            resp = self.class.send(type, url, :query => params, :verify => false, :headers => headers)
+        end
+        if resp == ""
+          {}
+        else
+          resp.inject({ }) { |h, (k,v)| h[k.to_sym] = v; h }
         end
     end
 

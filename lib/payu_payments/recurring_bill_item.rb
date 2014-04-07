@@ -7,21 +7,24 @@ module PayuPayments
     end
 
     def save 
-      if new?  
-        resp = post("/rest/v4.3/subscriptions/#{base.subscription_id}/#{@resource}", base.marshal_dump)
-      else 
-        resp = put("/rest/v4.3/#{@resource}/#{base.id}", :body => base.marshal_dump.to_json)
-      end 
+      verb = new? ? "post" : "put"
+      url = new? ? "#{API_PATH}/subscriptions/#{base.subscription_id}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
+      resp = http_call(verb, url, base.marshal_dump) 
       base.marshal_load resp
     end
 
     def create(params)
-     post("/rest/v4.3/subscriptions/#{base.subscription_id}/#{@resource}", base.marshal_dump)
+      url = "#{API_PATH}/subscriptions/#{attr.subscription_id}/#{@resource}"
+      resp = http_call(verb, url, base.marshal_dump) 
+      base.marshal_load resp
     end
 
-    def destroy
-      delete("/rest/v4.3/#{@resource}/#{base.id}")
+    def get_recurring_bill_items
+      url = "#{API_PATH}/#{@resource}/params"
+      resp = http_call(verb, url, base.marshal_dump) 
+      base.marshal_load resp
     end
+
   end
 
 end

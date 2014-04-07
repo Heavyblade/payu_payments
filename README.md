@@ -21,14 +21,11 @@ Or install it yourself as:
 ### Clients
 
 ```ruby
-
-  client = PayuPayments::Client.new(:fullName => "john Dow", :email => "johndoe@gmail.com")
-
+  @client = PayuPayments::Client.new(:fullName => "john Dow", :email => "johndoe@gmail.com")
 ```
 ### Credit Cards
 
 ```ruby
-
   creditCard: {
       name: "Sample User Name",
       document: "1020304050",
@@ -48,14 +45,12 @@ Or install it yourself as:
       }
   }
 
-  credit_card = client.add_credit_card(creditCard)
-
+  credit_card = @client.add_credit_card(creditCard)
 ```
 
 ### Plans
 
 ```ruby
-
   plan = {
           plan: {
                 planCode: "sample-plan-code-001",
@@ -82,7 +77,6 @@ Or install it yourself as:
           }
   }
   plan = Plan.new(plan)
-
 ```
 ### Subscriptions
 
@@ -92,7 +86,7 @@ Or install it yourself as:
                                         installments: "1",
                                         trialDays: "15",
                                         customer: {
-                                            id: client.id,
+                                            id: @client.id,
                                             creditCards: {
                                                 creditCard: { "token": credit_card.token }
                                         }
