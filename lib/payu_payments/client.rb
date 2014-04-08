@@ -11,7 +11,7 @@ module PayuPayments
     # emai
     # creditCards
     # subscriptions
-    
+
     def initialize(params={})
       super
       @resource = "customers"
@@ -32,7 +32,7 @@ module PayuPayments
       end
       subs
     end
-    
+
     def credit_cards
       ccs = []
       self.base.creditCards.each do |sub|

@@ -4,8 +4,9 @@ module Model
     def self.included(base)
         base.send :extend, ClassMethods
     end
+
     def attr
-      base
+        base
     end
 
     def save 
@@ -13,10 +14,6 @@ module Model
         @url ||= new? ? "#{API_PATH}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
         resp = http_call(verb, @url, base.marshal_dump) 
         base.marshal_load resp
-    end
-
-    def create(params)
-        http_call("post", "#{API_PATH}/#{@resource}", base.marshal_dump)
     end
 
     def load
@@ -39,6 +36,10 @@ module Model
             resp = self.new
             json = resp.http_call("get", "#{API_PATH}/#{resp.resource}/#{id}")
             self.new json
+        end
+
+        def create(params)
+            http_call("post", "#{API_PATH}/#{@resource}", base.marshal_dump)
         end
     end
 end

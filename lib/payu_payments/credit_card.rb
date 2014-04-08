@@ -37,20 +37,22 @@ module PayuPayments
     end
 
     def save 
-      @url = new? ? "#{API_PATH}/customers/#{base.customerId}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
+      @url = new? ? "#{API_PATH}/customers/#{attr.customerId}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
       super
     end
 
-    def create(customer_id, params)
-      url = "#{API_PATH}/customers/#{base.customerId}/#{@resource}"
+    def self.create(customer_id, params)
+      url = "#{API_PATH}/customers/#{attr.customerId}/#{@resource}"
       self.base.marshal_load params
-      resp = http_call("post", url, base.marshal_dump) 
+      resp = http_call("post", url, attr.marshal_dump) 
       base.marshal_load resp
     end
 
     def destroy(customer_id, id)
-      url = "#{API_PATH}/customers/#{customer_id}/#{@resource}/#{id}}"
-      http_call("delete", url) 
+      customer_id = self.attr.customerId
+      id = self.attr.id
+      @url = "#{API_PATH}/customers/#{customer_id}/#{@resource}/#{id}}"
+      super
     end
   end
 
