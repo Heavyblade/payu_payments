@@ -23,7 +23,8 @@ module Model
 
     def destroy
         @id ||= self.attr.id
-        http_call("delete", "#{API_PATH}/#{@resource}/#{@id}")
+        @url ||= "#{API_PATH}/#{@resource}/#{@id}"
+        http_call("delete", @url)
     end
 
     def new?

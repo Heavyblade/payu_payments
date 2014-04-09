@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["cristian@kommit.co"]
   spec.summary       = %q{Payulatam payments gatewat API gem}
   spec.description   = %q{Payulatam payments gatewat API gem}
-  spec.homepage      = ""
+  spec.homepage      = "https://github.com/Heavyblade/payu_payments"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
@@ -26,5 +26,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rake"
   spec.add_development_dependency "rspec"
   spec.add_development_dependency "guard-rspec"
-  spec.add_dependency "pry"
+  spec.add_development_dependency "pry"
 end
