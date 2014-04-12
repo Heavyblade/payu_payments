@@ -33,6 +33,18 @@ module PayuPayments
         expect(call.base.number).to eq(123)
     end
 
+    context "validations" do
+
+      it "should be able to validate the lenght of a fiekd" do
+        call = Caller.new(:name => "jhon")
+        call.validate_lenght_of(:name, 5)
+        expect(call.errors.count).to eq(1)
+        expect(call.errors.first[:message]).to eq("lenght of name should be 5")
+      end
+
+    end
+
+
 
     context "performing http calls" do
       before :each do

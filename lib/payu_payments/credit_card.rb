@@ -36,9 +36,13 @@ module PayuPayments
       @resource = "creditCards"
     end
 
-    def save 
-      @url = new? ? "#{API_PATH}/customers/#{attr.customerId}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
-      super
+    def save
+      if valid?
+        @url = new? ? "#{API_PATH}/customers/#{attr.customerId}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
+        super
+      else
+        false
+      end
     end
 
     def self.create(customer_id, params)
@@ -54,6 +58,20 @@ module PayuPayments
       @url = "#{API_PATH}/customers/#{customer_id}/#{@resource}/#{id}}"
       super
     end
+
+    def valid?
+        self.validate
+        self.errors.count == 0
+    end
+
+    def validate
+        [:customerId, :number, :expMonth, :expYear, :Type, :document, :address, :name].each do |field|
+          validate_presence_of(field)
+        end
+
+        validate_lenght_of(:expYear, 4)
+    end
+
   end
 
 end

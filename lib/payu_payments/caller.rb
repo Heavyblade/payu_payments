@@ -10,7 +10,7 @@ module PayuPayments
     API = "https://api.payulatam.com"
     API_SANDBOX = "https://stg.api.payulatam.com"
 
-    attr_accessor :access, :base, :resource
+    attr_accessor :access, :base, :resource, :errors
     format :json
     debug_output $stdout
 
@@ -27,6 +27,7 @@ module PayuPayments
       @access = PayuPayments.config
       @base = OpenStruct.new
       base.marshal_load params
+      @errors = []
     end
  
     def http_call(type, url, params={})

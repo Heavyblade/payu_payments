@@ -31,6 +31,28 @@ module Model
         base.id.nil?
     end
 
+    # xxxxxxxxxxxxxxxxx validations xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+    #
+    def validate_presence_of(field)
+      if (self.attr.send(field.to_s).nil? or self.attr.send(field.to_s) == "")
+          error = {}
+          error[:field] = field
+          error[:message] = "#{field} can't be blank"
+          self.errors << error
+      end
+    end
+
+    def validate_lenght_of(field, lenght)
+      unless self.attr.send(field.to_s).nil?
+        if self.attr.send(field.to_s).length != lenght
+            error = {}
+            error[:field] = field
+            error[:message] = "lenght of #{field} should be #{lenght}"
+            self.errors << error
+        end
+      end
+    end
+
     # Class Methods
     module ClassMethods
         def find(id)
