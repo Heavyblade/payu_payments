@@ -12,8 +12,18 @@ module Model
     def save 
         verb = new? ? "post" : "put"
         @url ||= new? ? "#{API_PATH}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
-        resp = http_call(verb, @url, base.marshal_dump) 
-        base.marshal_load resp
+        resp = http_call(verb, @url, base.marshal_dump)
+
+        if resp.is_a?(Array)
+          error = {}
+          error[:field] = resp[0]
+          error[:message] = resp[1]
+          self.errors << error
+          false
+        else
+          base.marshal_load resp
+          true
+        end
     end
 
     def load

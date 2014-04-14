@@ -41,7 +41,14 @@ module PayuPayments
                         'Authorization' => "Basic #{basic_auth.to_s}"}
             resp = self.class.send(type, url, :query => params, :verify => (access[:mode] == "production"), :headers => headers)
         end
-        (resp == "" or resp.nil?) ? {} : resp.inject({ }) { |h, (k,v)| h[k.to_sym] = v; h }
+
+        respond_with = (resp == "" or resp.nil?) ? {} : resp.inject({ }) { |h, (k,v)| h[k.to_sym] = v; h }
+
+        if resp.code.to_s.match(/2\d\d/)
+          respond_with
+        else
+          [respond_with[:type], respond_with[:description].match(/(.*)\(/)[1]]
+        end
     end
 
 

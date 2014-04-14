@@ -65,6 +65,7 @@ module PayuPayments
     end
 
     def validate
+        self.errors = []
         [:customerId, :number, :expMonth, :expYear, :Type, :document, :address, :name].each do |field|
           validate_presence_of(field)
         end
