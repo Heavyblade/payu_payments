@@ -68,7 +68,12 @@ module Model
         def find(id)
             resp = self.new
             json = resp.http_call("get", "#{API_PATH}/#{resp.resource}/#{id}")
-            self.new json
+
+            unless json["type"] == "NOT_FOUND"
+              self.new json
+            else
+              nil
+            end
         end
 
         def create(params)
