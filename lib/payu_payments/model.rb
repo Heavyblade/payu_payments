@@ -34,7 +34,8 @@ module Model
     def destroy
         @id ||= self.attr.id
         @url ||= "#{API_PATH}/#{@resource}/#{@id}"
-        http_call("delete", @url)
+        resp = http_call("delete", @url)
+        base.marshal_load resp
     end
 
     def new?
