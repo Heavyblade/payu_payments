@@ -35,7 +35,8 @@ module Model
         @id ||= self.attr.id
         @url ||= "#{API_PATH}/#{@resource}/#{@id}"
         resp = http_call("delete", @url)
-        base.marshal_load resp
+        base.marshal_load resp unless resp.is_a? Array
+        resp
     end
 
     def new?
