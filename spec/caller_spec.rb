@@ -47,6 +47,7 @@ module PayuPayments
 
 
     context "performing http calls" do
+      let (:resp) {a = {"valor1" => "hola"}; a.stub(:code => "200"); a}
       before :each do
         ::PayuPayments.config do |config|
           config.api_key = "6u39nqhq8ftd0hlvnjfs66eh8c"
@@ -64,7 +65,7 @@ module PayuPayments
         headers = { 'Accept' => "application/json", 
                     'Content-Type' => 'application/json; charset=UTF-8',
                     'Authorization' => "Basic abc123"}
-        Caller.should_receive(:send).with("post", "/someurl", :body => attr.to_json, :verify => false, :headers => headers)
+        Caller.should_receive(:send).with("post", "/someurl", :body => attr.to_json, :verify => false, :headers => headers).and_return(resp)
         call.http_call("post", "/someurl", attr)
       end
 
@@ -75,7 +76,7 @@ module PayuPayments
         headers = { 'Accept' => "application/json", 
                     'Content-Type' => 'application/json; charset=UTF-8',
                     'Authorization' => "Basic abc123"}
-        Caller.should_receive(:send).with("put", "/someurl", :body => attr.to_json, :verify => false, :headers => headers)
+        Caller.should_receive(:send).with("put", "/someurl", :body => attr.to_json, :verify => false, :headers => headers).and_return(resp)
         call.http_call("put", "/someurl", attr)
       end
 
@@ -86,7 +87,7 @@ module PayuPayments
         call.stub(:basic_auth => "abc123")
         headers = { 'Accept' => "application/json", 
                     'Authorization' => "Basic abc123"}
-        Caller.should_receive(:send).with("get", "/someurl", :query => attr, :verify => false, :headers => headers)
+        Caller.should_receive(:send).with("get", "/someurl", :query => attr, :verify => false, :headers => headers).and_return(resp)
         call.http_call("get", "/someurl", attr)
       end
 
@@ -96,7 +97,7 @@ module PayuPayments
         call.stub(:basic_auth => "abc123")
         headers = { 'Accept' => "application/json", 
                     'Authorization' => "Basic abc123"}
-        Caller.should_receive(:send).with("delete", "/someurl", :query => attr, :verify => false, :headers => headers)
+        Caller.should_receive(:send).with("delete", "/someurl", :query => attr, :verify => false, :headers => headers).and_return(resp)
         call.http_call("delete", "/someurl", attr)
       end
     end
