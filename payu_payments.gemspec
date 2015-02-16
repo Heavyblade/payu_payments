@@ -10,7 +10,7 @@ Gem::Specification.new do |spec|
   spec.email         = ["cristian@kommit.co"]
   spec.summary       = %q{Payulatam payments gatewat API gem}
   spec.description   = %q{Payulatam payments gatewat API gem}
-  spec.homepage      = "https://github.com/Heavyblade/payu_payments"
+  spec.homepage      = "https://github.com/kommitters/payu_payments"
   spec.license       = "MIT"
 
   spec.files         = `git ls-files`.split($/)
