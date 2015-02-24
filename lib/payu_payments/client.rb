@@ -1,5 +1,4 @@
 module PayuPayments
-
   class Client < Caller
 
     # xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
@@ -13,34 +12,30 @@ module PayuPayments
     # subscriptions
 
     def initialize(params={})
-      super
-      @resource = "customers"
+        super
+        @resource = "customers"
     end
 
     def add_credit_card(params)
-      cc = CreditCard.new(params)
-      cc.attr.customerId = self.base.id
-      cc.save
+        cc = CreditCard.new(params)
+        cc.attr.customerId = self.base.id
+        cc.save
     end
 
     def subscriptions
-      subs = []
-      self.base.subscriptions.each do |sub|
-          subscription =  Subscription.new
-          subscription.base.marshal_load(sub)
-          subs << subscription
-      end
-      subs
+        self.base.subscriptions.map do |sub|
+            subscription =  Subscription.new
+            subscription.base.marshal_load(sub)
+            subscription
+        end
     end
 
     def credit_cards
-      ccs = []
-      self.base.creditCards.each do |sub|
-          cc =  CreditCard.new
-          cc.base.marshal_load(sub)
-          ccs << cc
-      end
-      ccs
+        self.base.creditCards.each.map do |sub|
+            cc =  CreditCard.new
+            cc.base.marshal_load(sub)
+            cc
+        end
     end
   end
 

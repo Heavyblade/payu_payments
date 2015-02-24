@@ -43,6 +43,15 @@ module Model
         base.id.nil?
     end
 
+    def method_missing(method_name, *arguments, &block)
+        if base.marshal_dump.include?(method_name.to_s.strip.to_sym) || method_name.match(/.*=$/)
+           base.send(method_name.to_s.strip, *arguments, &block)
+        else
+          super
+        end
+    end
+
+
     # xxxxxxxxxxxxxxxxx validations xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
     #
     def validate_presence_of(field)

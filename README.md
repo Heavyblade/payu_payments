@@ -1,6 +1,7 @@
 # PayuPayments
 
-A wrapp for the PayuLata.com payment gateway
+A wrapper for the PayuLatam.com payment gateway, it include the
+managment of clients, plans, subscriptions and creditCards.
 
 ## Installation
 
@@ -18,14 +19,43 @@ Or install it yourself as:
 
 ## Usage
 
+All the clases work as a simple crud objects, the models also have a
+basic attributes validations.
+
 ### Clients
 
-```ruby
-  @client = PayuPayments::Client.new(:fullName => "john Dow", :email => "johndoe@gmail.com")
-```
-### Credit Cards
+Create clients:
 
 ```ruby
+  @client = PayuPayments::Client.new(:fullName => "john Doe", :email => "johndoe@gmail.com")
+
+  # or
+  
+  @client = PayuPayments::Client.new
+  @client.fullName = "john Doe"
+  @client.email = "johndoe@gmail.com"
+
+  @client.save
+```
+You can also retrieve clients from the API if you know it's id
+
+```ruby
+
+  @client = PayuPayments::Client.find(123)
+  @client.fullName = "New name"
+  @client.save
+
+```
+
+
+### Credit Cards
+
+You can store a tokenized credit card on payupayment by adding it to a
+client:
+
+```ruby
+  @client = Paypayments::Client.find(123)
+
   creditCard: {
       name: "Sample User Name",
       document: "1020304050",

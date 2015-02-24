@@ -23,3 +23,13 @@ module PayuPayments
     end
   end
 end
+
+PayuPayments.config do |config|
+  config.api_key = "6u39nqhq8ftd0hlvnjfs66eh8c"
+  config.api_login = "11959c415b33d0c"
+  config.merchant_id = "500238"
+  config.account = "500538"
+  config.mode = "development"
+end
+
+
