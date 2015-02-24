@@ -47,7 +47,7 @@ module PayuPayments
         if resp.code.to_s.match(/2\d\d/)
           respond_with
         else
-          [respond_with[:type], respond_with[:description]]
+          {"type" => respond_with[:type], "description" => respond_with[:description]}
         end
     end
 

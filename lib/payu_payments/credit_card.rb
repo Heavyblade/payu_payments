@@ -32,8 +32,8 @@ module PayuPayments
     # State	      Longitud = [0, 40]	String	Nombre del estado de la dirección.
 
     def initialize(params={})
-      super
-      @resource = "creditCards"
+        super
+        @resource = "creditCards"
     end
 
     def save
@@ -46,17 +46,17 @@ module PayuPayments
     end
 
     def self.create(customer_id, params)
-      url = "#{API_PATH}/customers/#{attr.customerId}/#{@resource}"
-      self.base.marshal_load params
-      resp = http_call("post", url, attr.marshal_dump) 
-      base.marshal_load resp
+        url = "#{API_PATH}/customers/#{attr.customerId}/#{@resource}"
+        self.base.marshal_load params
+        resp = http_call("post", url, attr.marshal_dump) 
+        base.marshal_load resp
     end
 
     def destroy(customer_id, id)
-      customer_id = self.attr.customerId
-      id = self.attr.id
-      @url = "#{API_PATH}/customers/#{customer_id}/#{@resource}/#{id}}"
-      super
+        customer_id = self.attr.customerId
+        id = self.attr.id
+        @url = "#{API_PATH}/customers/#{customer_id}/#{@resource}/#{id}}"
+        super
     end
 
     def valid?
