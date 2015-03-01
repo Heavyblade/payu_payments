@@ -12,56 +12,45 @@ module PayuPayments
 
     attr_accessor :access, :base, :resource, :errors
     format :json
-    debug_output $stdout
+    alias :attr :base
 
     def set_base_uri
-      if PayuPayments.config[:mode] == "production"
-        self.class.base_uri API
-      else
-        self.class.base_uri API_SANDBOX
-      end
+        self.class.base_uri(PayuPayments.config[:mode] == "production" ? API : API_SANDBOX)
     end
 
     def initialize(params={})
-      self.set_base_uri
-      @access = PayuPayments.config
-      @base = OpenStruct.new
-      base.marshal_load params
-      @errors = []
+        @access = PayuPayments.config
+        self.set_base_uri
+        self.class.debug_output $stdout if @access[:show_log]
+
+        @base = OpenStruct.new
+        base.marshal_load params
+        @errors = []
     end
  
     def http_call(type, url, params={})
-        if type == "post" || type == "put"
+        if ["post", "put"].include? type
             headers = { 'Accept' => "application/json", 
                         'Content-Type' => 'application/json; charset=UTF-8',
-                        'Authorization' => "Basic #{basic_auth.to_s}"}
+                        'Authorization' => "Basic #{basic_auth}"}
             resp = self.class.send(type, url, :body => params.to_json, :verify => (access[:mode] == "production"), :headers => headers)
         else
             headers = { 'Accept' => "application/json", 
-                        'Authorization' => "Basic #{basic_auth.to_s}"}
+                        'Authorization' => "Basic #{basic_auth}"}
             resp = self.class.send(type, url, :query => params, :verify => (access[:mode] == "production"), :headers => headers)
         end
 
         respond_with = (resp == "" or resp.nil?) ? {} : resp.inject({ }) { |h, (k,v)| h[k.to_sym] = v; h }
 
         if resp.code.to_s.match(/2\d\d/)
-          respond_with
+           respond_with
         else
-          {"type" => respond_with[:type], "description" => respond_with[:description]}
+           {"type" => respond_with[:type], "description" => respond_with[:description]}
         end
     end
 
 
 private
-
-    def basic_params
-        { :language => "ES", 
-          :test => (access[:mode] == "development"),
-          :merchant => { :apiLogin => access[:api_login], 
-                         :apiKey => access[:api_key]
-                        }
-        }
-    end
 
     def basic_auth
         Base64.encode64("#{access[:api_login]}:#{access[:api_key]}")

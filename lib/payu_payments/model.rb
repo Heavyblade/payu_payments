@@ -5,19 +5,13 @@ module Model
         base.send :extend, ClassMethods
     end
 
-    def attr
-        base
-    end
-
     def save 
         verb = new? ? "post" : "put"
         @url ||= new? ? "#{API_PATH}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
         resp = http_call(verb, @url, base.marshal_dump)
 
         if resp.is_a?(Array)
-          error = {}
-          error[:field] = resp[0]
-          error[:message] = resp[1]
+          error = {field: resp[0], message: resp[1]}
           self.errors << error
           false
         else
@@ -47,31 +41,31 @@ module Model
         if base.marshal_dump.include?(method_name.to_s.strip.to_sym) || method_name.match(/.*=$/)
            base.send(method_name.to_s.strip, *arguments, &block)
         else
-          super
+           super
         end
     end
 
 
     # xxxxxxxxxxxxxxxxx validations xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
-    #
+
     def validate_presence_of(field)
-      if (self.attr.send(field.to_s).nil? or self.attr.send(field.to_s) == "")
-          error = {}
-          error[:field] = field
-          error[:message] = "#{field} can't be blank"
-          self.errors << error
-      end
+        if (self.attr.send(field.to_s).nil? or self.attr.send(field.to_s) == "")
+            error = {}
+            error[:field] = field
+            error[:message] = "#{field} can't be blank"
+            self.errors << error
+        end
     end
 
     def validate_lenght_of(field, lenght)
-      unless self.attr.send(field.to_s).nil?
-        if self.attr.send(field.to_s).length != lenght
-            error = {}
-            error[:field] = field
-            error[:message] = "lenght of #{field} should be #{lenght}"
-            self.errors << error
+        unless self.attr.send(field.to_s).nil?
+          if self.attr.send(field.to_s).length != lenght
+              error = {}
+              error[:field] = field
+              error[:message] = "lenght of #{field} should be #{lenght}"
+              self.errors << error
+          end
         end
-      end
     end
 
     # Class Methods

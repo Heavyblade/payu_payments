@@ -37,12 +37,12 @@ module PayuPayments
     end
 
     def save
-      if valid?
-        @url = new? ? "#{API_PATH}/customers/#{attr.customerId}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
-        super
-      else
-        false
-      end
+        if valid?
+          @url = new? ? "#{API_PATH}/customers/#{attr.customerId}/#{@resource}" : "#{API_PATH}/#{@resource}/#{base.id}"
+          super
+        else
+          false
+        end
     end
 
     def self.create(customer_id, params)

@@ -15,8 +15,8 @@ module PayuPayments
     # plan	-	Plan	Plan asociado a la suscripción.
 
     def initialize(params={})
-      super
-      @resource = "subscriptions"
+        super
+        @resource = "subscriptions"
     end
 
     def add_extra_charges(params={})
