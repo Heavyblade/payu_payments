@@ -9,7 +9,7 @@ module PayuPayments
 
   def self.config(&block)
       @configuration ||= Configuration.new
-   
+
       unless block.nil?
         yield @configuration
       else

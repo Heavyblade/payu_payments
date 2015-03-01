@@ -33,8 +33,7 @@ To use the gem you need to set the keys available on your account
     config.api_login = "xxxxxxx"
     config.merchant_id = "123456"
     config.account = "7890"
-    config.mode = "development" # or production to point to production
-end-point
+    config.mode = "development" # or production to point to production end-point
   end
 
 ```
