@@ -19,12 +19,14 @@ Or install it yourself as:
 
 ## Usage
 
-All the clases work as a simple crud objects, the models also have a
+All the clases work as a simple CRUD objects, the models also have a
 basic attributes validations.
 
 ### Clients
 
-Create clients:
+To perform transactions with the API an entity representing the
+custormer needs to be created, this entity is de Client and can be
+created and updated using the PayuPayments::Client class.
 
 ```ruby
   @client = PayuPayments::Client.new(:fullName => "john Doe", :email => "johndoe@gmail.com")
@@ -50,18 +52,21 @@ You can also retrieve clients from the API if you know it's id
 
 ### Credit Cards
 
-You can store a tokenized credit card on payupayment by adding it to a
-client:
+You can store a tokenized credit card on the gateway tekenization
+service by adding it to a client, in that way the credit card will be
+stored directly in the PCI compliant gateway and can be used to charge the
+client in future transactiosn without requiring to fill the credit card
+form again.
 
 ```ruby
-  @client = Paypayments::Client.find(123)
+  @client = PayuPayments::Client.find(123)
 
   creditCard: {
       name: "Sample User Name",
       document: "1020304050",
       number: "4242424242424242",
       expMonth: "01",
-      expYear: "2018",
+      expYear: "2020",
       type: "VISA",
       address: {
                 line1: "Address Name",
@@ -76,12 +81,21 @@ client:
   }
 
   credit_card = @client.add_credit_card(creditCard)
+
+  ### To list the credit cards from a client
+  
+  @client.credit_cards
 ```
 
 ### Plans
 
+To create a recurring payment model you need to create plans, plans
+describe the different ways that you can sell your suscription based
+products, here you describe the product how much you will charge for it an
+how you want to charge for it
+
 ```ruby
-  plan = {
+  planParams = {
           plan: {
                 planCode: "sample-plan-code-001",
                 description: "Sample Plan 001",
@@ -106,9 +120,17 @@ client:
                 }
           }
   }
-  plan = Plan.new(plan)
+  plan = PayuPayments::Plan.new(planParams)
+  plan.save
+  
+  # or
+  plan = PayuPayments::Plan.create(planParams)
 ```
 ### Subscriptions
+
+Subscription will glue all together to create a subscription based
+products, with a suscription you will bind a
+client with a tokenized credit card with a plan,
 
 ```ruby
   PayuPayments::Subscription.create(subscription: {
@@ -123,6 +145,9 @@ client:
                                         },
                                         plan: { "planCode": plan.planCode }
                                     })
+
+  # to check a client susbscriptions
+  @client.subscriptions
 
 ```
 
