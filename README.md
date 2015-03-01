@@ -1,6 +1,6 @@
 # PayuPayments
 
-A wrapper for the PayuLatam.com payment gateway, it include the
+A wrapper for the [PayuLatam.com](http://www.payulatam.com/) payment gateway, it include the
 managment of clients, plans, subscriptions and creditCards.
 
 ## Installation
@@ -21,6 +21,24 @@ Or install it yourself as:
 
 All the clases work as a simple CRUD objects, the models also have a
 basic attributes validations.
+
+## Configuration
+
+To use the gem you need to set the keys available on your account
+
+
+```ruby
+  PayuPayments.config do |config|
+    config.api_key = "xxxxxxxxxxxxxx"
+    config.api_login = "xxxxxxx"
+    config.merchant_id = "123456"
+    config.account = "7890"
+    config.mode = "development" # or production to point to production
+end-point
+  end
+
+```
+
 
 ### Clients
 
