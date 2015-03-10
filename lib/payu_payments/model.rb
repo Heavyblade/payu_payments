@@ -68,6 +68,14 @@ module Model
         end
     end
 
+    def validates_format_of(field, regexp, message)
+        unless self.attr.send(field.to_s).nil? 
+              unless self.attr.send(field.to_s).match regexp
+               self.errors << { field: field, message: message }
+              end
+        end
+    end
+
     # Class Methods
     module ClassMethods
         def find(id)

@@ -59,11 +59,6 @@ module PayuPayments
         super
     end
 
-    def valid?
-        self.validate
-        self.errors.count == 0
-    end
-
     def validate
         self.errors = []
         [:customerId, :number, :expMonth, :expYear, :type, :document, :address, :name].each do |field|

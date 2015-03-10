@@ -4,17 +4,32 @@ module PayuPayments
 
   describe Client do
      it "should be able to create a client" do
-       client = Client.new(:fullName => "John Doe", :email => "johndoe@gmail.com")
-       client.should_receive(:http_call).with("post", "/payments-api/rest/v4.3/customers", {:fullName => "John Doe", :email => "johndoe@gmail.com"}).and_return(:fullName => "John Doe", :email => "johndoe@gmail.com")
-       client.save
+         client = Client.new(:fullName => "John Doe", :email => "johndoe@gmail.com")
+         client.should_receive(:http_call).with("post", "/payments-api/rest/v4.3/customers", {:fullName => "John Doe", :email => "johndoe@gmail.com"}).and_return(:fullName => "John Doe", :email => "johndoe@gmail.com")
+         client.save
      end
 
+     it "should validate the required fields" do
+         client = Client.new
+         client.should_not be_valid
+         expect(client.errors.count).to be > 0
+         expect(client.errors[0][:field]).to eql(:fullName)
+         expect(client.errors[1][:field]).to eql(:email)
+     end
+
+     it "should validate the format of the email" do
+         client = Client.new(:fullName => "John Doe", :email => "johndoegmail.com")
+         client.should_not be_valid
+         expect(client.errors[0][:field]).to eql(:email)
+         expect(client.errors[0][:message]).to eql("The Email doesn't have the correct format")
+     end 
+
      it "should be able to find a client with its id" do
-        call = Client.new
-        call.should_receive(:http_call).with("get","/payments-api/rest/v4.3/customers/1").and_return(:fullName => "John Doe", :email => "johndoe@gmail.com", :id => 1)
-        Client.should_receive(:new).twice.and_return(call)
-        client = Client.find(1) 
-        expect(client).to be_an_instance_of(Client)
+         call = Client.new
+         call.should_receive(:http_call).with("get","/payments-api/rest/v4.3/customers/1").and_return(:fullName => "John Doe", :email => "johndoe@gmail.com", :id => 1)
+         Client.should_receive(:new).twice.and_return(call)
+         client = Client.find(1) 
+         expect(client).to be_an_instance_of(Client)
      end
 
      it "should save a credit card related to the client" do

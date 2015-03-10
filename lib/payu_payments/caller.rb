@@ -49,6 +49,11 @@ module PayuPayments
         end
     end
 
+    def valid?
+        self.validate
+        self.errors.count == 0
+    end
+
 
 private
 

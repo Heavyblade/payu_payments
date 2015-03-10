@@ -37,6 +37,15 @@ module PayuPayments
             cc
         end
     end
-  end
 
+    def validate
+        self.errors = []
+        [:fullName, :email].each do |field|
+          validate_presence_of(field)
+        end
+
+        validates_format_of :email, /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z]+)*\.[a-z]+\z/i, "The Email doesn't have the correct format"
+    end
+
+  end
 end
