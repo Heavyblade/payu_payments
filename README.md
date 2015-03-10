@@ -1,6 +1,6 @@
 # PayuPayments
 
-A wrapper for the [PayuLatam.com](http://www.payulatam.com/) payment gateway, it include the
+A Ruby wrapper for the [PayuLatam.com](http://www.payulatam.com/) payment gateway, it include the
 managment of clients, plans, subscriptions and creditCards.
 
 ## Installation
@@ -24,10 +24,11 @@ basic attributes validations.
 
 ## Configuration
 
-To use the gem you need to set the keys available on your account
+To use the gem you need to set the keys available on your Payu account:
 
 
 ```ruby
+
   PayuPayments.config do |config|
     config.api_key = "xxxxxxxxxxxxxx"
     config.api_login = "xxxxxxx"
@@ -37,6 +38,9 @@ To use the gem you need to set the keys available on your account
   end
 
 ```
+
+In development mode all the calls will be hitting the test end-point
+using the credentials that the API documentation [indicates](http://desarrolladores.payulatam.com/en/api-pruebas-pago/)
 
 
 ### Clients
@@ -69,7 +73,7 @@ You can also retrieve clients from the API if you know it's id
 
 ### Credit Cards
 
-You can store a tokenized credit card on the gateway tekenization
+You can store a tokenized credit card on the Payu tekenization
 service by adding it to a client, in that way the credit card will be
 stored directly in the PCI compliant gateway and can be used to charge the
 client in future transactiosn without requiring to fill the credit card
